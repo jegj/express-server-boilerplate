@@ -50,6 +50,7 @@ process.on('SIGINT', () => {
 	process.exit(1);
 });
 
+//TODO: Move to another place
 function normalizePort(val) {
 	const port = parseInt(val, 10);
 

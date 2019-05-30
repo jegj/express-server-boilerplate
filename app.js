@@ -4,18 +4,22 @@
 require('dotenv').config();
 require('app-module-path').addPath(__dirname);
 
+/**
+ * Add external middlewares to customize your REST API
+ */
+
 const express = require('express');
 // const cors = require('cors');
 // const rateLimit = require("express-rate-limit");
 // const bodyParser = require('body-parser');
 
-const usersRouter = require('./routers/users');
 const app = express();
 
-// view engine setup
+// View engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
+// JSON Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -37,15 +41,17 @@ app.disable('x-powered-by');
 // https://www.npmjs.com/package/express-rate-limit
 // app.use(limiter);
 
-// Loading routers
-app.use('/api/v1/users', usersRouter);
+// Loading Application routers
+require('./routers')(app);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
+// TODO: Needs work
 app.use(function(req, res, next) {
 	next(createError(404));
 });
 
-// error handler
+// Central Error handler
+// TODO: Needs work
 app.use(function(err, req, res, next) {
 	// set locals, only providing error in development
 	res.locals.message = err.message;
