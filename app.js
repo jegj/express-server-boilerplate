@@ -1,7 +1,6 @@
-/* index.js */
+/* app.js */
 'use strict';
 
-require('dotenv').config();
 require('app-module-path').addPath(__dirname);
 
 /**
@@ -42,7 +41,7 @@ app.disable('x-powered-by');
 // app.use(limiter);
 
 // Loading Application routers
-require('./routers')(app);
+// require('./routers')( { app, logger: null });
 
 // Catch 404 and forward to error handler
 // TODO: Needs work
