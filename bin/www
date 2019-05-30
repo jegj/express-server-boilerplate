@@ -1,0 +1,67 @@
+#!/usr/bin/env node
+
+const http = require('http');
+const fs = require('fs');
+
+const app = require('../app');
+
+const DEFAULT_PORT = 3000;
+const socket = process.env.SOCKET_FILE || null;
+
+let server, mask, port, finalListen;
+
+// Check if the server will be at a socket or port
+if ( socket ) {
+	mask = process.umask(0);
+	if (fs.existsSync(socket)) {
+		fs.unlinkSync(socket);
+	}
+	finalListen = socket;
+} else{
+	port = normalizePort(process.env.PORT || DEFAULT_PORT);
+	app.set('port', port);
+	finalListen = port;
+}
+
+// Create http server
+server = http.createServer(app);
+// Start listening
+server.listen(finalListen, () => {
+	// umask only the socket - ports doesn't require this step
+	if (mask && finalListen == socket) {
+		process.umask(mask);
+		mask = null;
+	}
+	const addr = server.address();
+	const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+	console.info('Listening on ' + bind);
+});
+
+// Unhandled uncaught exceptions
+process.on('uncaughtException', function (err) {
+	console.error(err)
+	process.exit(1);
+});
+
+// Graceful-shutdown only in production or staging
+process.on('SIGINT', () => {
+	console.error('SIGINT signal received.');
+	server.close();
+	process.exit(1);
+});
+
+function normalizePort(val) {
+	const port = parseInt(val, 10);
+
+	if (isNaN(port)) {
+		// named pipe
+		return val;
+	}
+
+	if (port >= 0) {
+		// port number
+		return port;
+	}
+
+	return false;
+}
