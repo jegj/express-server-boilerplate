@@ -4,6 +4,22 @@ require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 
+// Load logger
+const LOGGER = require('../lib/logger');
+
+// Unhandled uncaught exceptions
+process.on('uncaughtException', function (err) {
+	LOGGER.error(`Unhandled exception:`, err);
+	process.exit(1);
+});
+
+// Graceful-shutdown only in production or staging
+process.on('SIGINT', () => {
+	LOGGER.error('SIGINT signal received.');
+	server.close();
+	process.exit(1);
+});
+
 const app = require('../app');
 
 const DEFAULT_PORT = 3000;
@@ -35,20 +51,7 @@ server.listen(finalListen, () => {
 	}
 	const addr = server.address();
 	const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-	console.info('Listening on ' + bind);
-});
-
-// Unhandled uncaught exceptions
-process.on('uncaughtException', function (err) {
-	console.error(err)
-	process.exit(1);
-});
-
-// Graceful-shutdown only in production or staging
-process.on('SIGINT', () => {
-	console.error('SIGINT signal received.');
-	server.close();
-	process.exit(1);
+	LOGGER.info('Listening on ' + bind);
 });
 
 //TODO: Move to another place
