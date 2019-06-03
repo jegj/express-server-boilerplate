@@ -9,7 +9,7 @@ const { normalizePort } = require('../lib/utils');
 
 // Unhandled uncaught exceptions
 process.on('uncaughtException', function (err) {
-	LOGGER.error(`Unhandled exception:`, err);
+	LOGGER.error(`Unhandled exception: `, err);
 	process.exit(1);
 });
 
