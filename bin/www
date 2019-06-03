@@ -4,8 +4,8 @@ require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 
-// Load logger
 const LOGGER = require('../lib/logger');
+const { normalizePort } = require('../lib/utils');
 
 // Unhandled uncaught exceptions
 process.on('uncaughtException', function (err) {
@@ -20,7 +20,7 @@ process.on('SIGINT', () => {
 	process.exit(1);
 });
 
-const app = require('../app');
+const app = require('../app')({ LOGGER });
 
 const DEFAULT_PORT = 3000;
 const socket = process.env.SOCKET_FILE || null;
@@ -53,20 +53,3 @@ server.listen(finalListen, () => {
 	const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
 	LOGGER.info('Listening on ' + bind);
 });
-
-//TODO: Move to another place
-function normalizePort(val) {
-	const port = parseInt(val, 10);
-
-	if (isNaN(port)) {
-		// named pipe
-		return val;
-	}
-
-	if (port >= 0) {
-		// port number
-		return port;
-	}
-
-	return false;
-}
