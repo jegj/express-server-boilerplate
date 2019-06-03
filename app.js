@@ -8,16 +8,9 @@ require('app-module-path').addPath(__dirname);
  */
 
 const express = require('express');
-// const cors = require('cors');
-// const rateLimit = require("express-rate-limit");
-// const bodyParser = require('body-parser');
 
 module.exports = ( { LOGGER }) => {
 	const app = express();
-
-	// View engine setup
-	// app.set('views', path.join(__dirname, 'views'));
-	// app.set('view engine', 'jade');
 
 	// JSON Parser
 	app.use(express.json());
@@ -28,6 +21,7 @@ module.exports = ( { LOGGER }) => {
 
 	// Enable cors
 	// https://www.npmjs.com/package/cors
+	// const cors = require('cors');
 	// app.use(cors());
 
 	// Only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
@@ -39,10 +33,16 @@ module.exports = ( { LOGGER }) => {
 
 	// Create rate limiter
 	// https://www.npmjs.com/package/express-rate-limit
+	// const rateLimit = require("express-rate-limit");
 	// app.use(limiter);
 
+
+	// View engine setup
+	// app.set('views', path.join(__dirname, 'views'));
+	// app.set('view engine', 'jade');
+
 	// Loading Application routers
-	// require('./routers')( { app, LOGGER });
+	require('./routers')( { app, LOGGER });
 
 	return app ;
 };
