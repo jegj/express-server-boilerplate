@@ -1,0 +1,18 @@
+{
+	"title": "schema test 1",
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"$id": "test1",
+	"properties": {
+		"body": {
+			"type":["number","string","boolean","null","object","array"]
+		},
+		"initiator": { "type": "integer", "description": "user id of initiator" }
+	},
+	"required": [ "body" ],
+	"additionalProperties": false,
+	"errorMessage": {
+		"properties": {
+      "initiator": "Should be custom"
+    }
+  }
+}

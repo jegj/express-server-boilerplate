@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
+/* routes/index.js */
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+function loadRouters( { app, LOGGER } ) {
+	LOGGER.debug(`Loading routers...`);
+	app.use( '/v1/users', require('./users')( { LOGGER, expRouterOpts: null }) );
+	// app.use( '/v1/dummy', require('./users')() );
+	// app.use( '/v1/dummy', require('./users')() );
+	// app.use( '/v1/dummy', require('./users')() );
+};
 
-module.exports = router;
+module.exports = loadRouters;

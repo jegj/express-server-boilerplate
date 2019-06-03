@@ -1,9 +1,32 @@
-var express = require('express');
-var router = express.Router();
+/* routers/com/index.js */
+'use strict';
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+const { createRouter } = require('lib/router');
+const JSONValidator = require('lib/jsonvalidator');
+// const RX = require('../../../../index').ReqValidator;
+const schema1 = require('schemas/users/schema1.json');
+// const cc = require('controllers/dummy');
 
-module.exports = router;
+const jsonvalidator = new JSONValidator(
+	[ schema1 ],
+	{ allErrors: true, jsonPointers: true }
+);
+
+const authorization = {};
+
+const UsersRouter = function createrUsersRouter( { LOGGER, expRouterOpts = {} }){
+	const routes = [
+		// Route
+		{
+			method:           'get',
+			path:             '/',
+			rprivs:           [],
+			rheaders:         [],
+			controller:       [],
+			// name:             'users' // Optional just for debugging purpose
+		}
+	];
+	return createRouter(routes, { LOGGER, expRouterOpts, jsonvalidator, authorization})
+}
+
+module.exports = UsersRouter;
